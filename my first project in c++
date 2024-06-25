@@ -1,0 +1,268 @@
+#include <iostream> // to call input and output stream (cout and cin)
+#include <string> // to identify names 
+#include <vector> //a dynamic array that can resize itself automatically as elements are added or removed
+
+using namespace std;
+
+// Constants
+const int MAX_ACCOUNTS = 100;
+const int MAX_TRANSACTIONS = 5000;
+
+// Structure to represent a transaction
+struct Transaction {
+    string type;  // Deposit and Withdraw
+    double amount;
+};
+
+// Structure to represent a bank account
+struct BankAccount {
+    string accountHolderName;
+    int pin;
+    double balance;
+    bool agreedToTerms;
+    vector<Transaction> transactions;  // Array to store transaction history
+};
+
+// Functions to make
+void createAccount(BankAccount accounts[], int& numAccounts);
+void deposit(BankAccount& account, double amount);
+void withdraw(BankAccount& account, double amount);
+void displayBalance(const BankAccount& account);
+bool authenticateAccount(const BankAccount accounts[], const string& accountHolderName, int pin);
+
+int main() {
+    BankAccount accounts[MAX_ACCOUNTS];
+    int numAccounts = 0;
+
+    // Menu
+    int choice;
+    do {
+      cout<<"                           Welcome   to                     \n";
+	  cout<<"       .....................................................\n";
+	  cout<<"      .......................................................\n";
+      cout<<"     .........................................................\n";
+	  cout<<"    ...........................................................\n";
+	  cout<<"            ......   ......             ......   ......\n";
+
+	  cout<<"            ......   ......             ......   ......\n";
+	  cout<<"            ......   ......             ......   ......\n";
+	  cout<<"            ......   ......  	        ......   ......\n";
+	  cout<<"            ......   ......             ......   ......\n";
+cout<<endl;
+	  cout<<"	    ......   ......             ......   ......\n";
+
+cout<<"                     M       M  EEEEE  U     U\n";
+cout<<"                     MM     MM  E      U     U\n";
+cout<<"                     M M   M M  EEEE   U     U\n";
+cout<<"                     M  M M  M  E      U     U\n";
+cout<<"                     M   M   M  EEEEE   UUUUU\n";
+
+	  cout<<"	    ......   ......             ......   ......\n";
+cout<<endl;
+
+	  cout<<"	    ......   ......             ......   ......\n";
+	  cout<<"	    ......   ......             ......   ......\n";
+	  cout<<"	    ......   ......             ......   ......\n";
+	  cout<<"	    ......   ......             ......   ......\n";
+	  cout<<"	    ......   ......             ......   ......\n";
+	  cout<<"    ...........................................................\n";
+      cout<<"   .............................................................\n";
+	  cout<<"  ...............................................................\n";
+	  
+
+
+
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        cout << "\a\a\t\tMEU Bank System Menu:\n\tEnter your choice (1-4, 0 to exit):\n";
+        cout << "    1. Create Account\n";
+        cout << "    2. Deposit\n";
+        cout << "    3. Withdraw\n";
+        cout << "    4. Display Details\n";
+        cout << "    0. Exit\n";
+        cout << "    Enter your choice: ";
+        cin >> choice;
+
+        switch (choice) {
+            case 1://createAccount
+                createAccount(accounts, numAccounts);
+                break;
+            case 2: {// Deposit
+                string accountHolderName;
+                int pin;
+
+                cout << "Enter account holder name: ";
+                cin >> accountHolderName;
+                cout << "Enter PIN: ";
+                cin >> pin;
+
+                if (authenticateAccount(accounts, accountHolderName, pin)) {
+                    for (int i = 0; i < numAccounts; ++i) {
+                        if (accounts[i].accountHolderName == accountHolderName) {
+                            double amount;
+                            cout << "Enter deposit amount: ";
+                            cin >> amount;
+                            deposit(accounts[i], amount);
+                            break;
+                        }
+                    }
+                } else {
+                    cout << "Authentication failed. Incorrect account holder name or PIN.\n";
+                }
+                break;
+            }
+            case 3: {// withdraw
+                string accountHolderName;
+                int pin;
+
+                cout << "Enter account holder name: ";
+                cin >> accountHolderName;
+                cout << "Enter PIN: ";
+                cin >> pin;
+
+                if (authenticateAccount(accounts, accountHolderName, pin)) {
+                    for (int i = 0; i < numAccounts; ++i) {
+                        if (accounts[i].accountHolderName == accountHolderName) {
+                            double amount;
+                            cout << "Enter withdrawal amount: ";
+                            cin >> amount;
+                            withdraw(accounts[i], amount);
+                            break;
+                        }
+                    }
+                } else {
+                    cout << "Authentication failed. Incorrect account holder name or PIN.\n";
+                }
+                break;
+            }
+            case 4: {// show Account Details
+                string accountHolderName;
+                int pin;
+
+                cout << "Enter account holder name: ";
+                cin >> accountHolderName;
+                cout << "Enter PIN: ";
+                cin >> pin;
+
+                if (authenticateAccount(accounts, accountHolderName, pin)) {
+                    for (int i = 0; i < numAccounts; ++i) {
+                        if (accounts[i].accountHolderName == accountHolderName) {
+                            displayBalance(accounts[i]);
+                            break;
+                        }
+                    }
+                } else {
+                    cout << "Authentication failed. Incorrect account holder name or PIN.\n";
+                }
+                break;
+            }
+            case 0:// exit the system
+                cout << "\a\a\aExiting MEU Bank System. Goodbye!\n";
+                break;
+            default:
+                cout << "Invalid choice. Please try again.\n";
+        }
+
+    } while (choice != 0);
+
+    return 0;
+}
+
+// Function to create a new bank account
+void createAccount(BankAccount accounts[], int& numAccounts) {
+    if (numAccounts < MAX_ACCOUNTS) {
+        cout << "note:Enter account holder full name with no spaces "<<endl;
+        cout << "account holder full name: ";
+
+        cin >> accounts[numAccounts].accountHolderName;
+
+        cout << "Set a 4-digit PIN for the account: ";
+        cin >> accounts[numAccounts].pin;
+
+        // Ask the user to agree to terms
+        char agreement;
+        cout << "Do you agree to the terms and conditions that include:\n 5% interest rate of every month salary and \n if (Account Balance) less than 50 JD we will deduct 1 JD from Account Balance \n  (y/n): ";
+        cin >> agreement;
+
+        accounts[numAccounts].agreedToTerms = (agreement == 'y' || agreement == 'Y');
+
+        if (!accounts[numAccounts].agreedToTerms) {
+            cout << "\a\aAccount creation failed. You must agree to the terms and conditions.\n";
+            return;
+        }
+
+        accounts[numAccounts].balance = 0.0;
+        numAccounts++;
+
+        cout << "Account created successfully. Account holder name: " << accounts[numAccounts - 1].accountHolderName << endl;
+    } else {
+        cout << "Cannot create more accounts. Maximum limit reached.\n";
+    }
+}
+
+// Function to deposit into an account
+void deposit(BankAccount& account, double amount) {
+    if (amount > 0) {
+        account.balance += amount;
+
+        // Add the deposit transaction to the transaction history
+        Transaction depositTransaction = {"Deposit", amount};
+        account.transactions.push_back(depositTransaction); //push_back used to store (depositTransaction) in vector
+
+        cout << "Deposit successful. New balance: " << account.balance << endl;
+    } else {
+        cout << "Invalid deposit amount. Please enter a positive value.\n";
+    }
+}
+
+// Function to withdraw from an account
+void withdraw(BankAccount& account, double amount) {
+    if (amount > 0 && amount <= account.balance && (static_cast<int>(amount) % 5 == 0)) {
+        account.balance -= amount;
+
+        // Deduct 1 JD if the balance is less than 50 JD
+        if (account.balance < 50) {
+            account.balance -= 1.0;
+            cout << "Due to balance less than 50 JD, 1 JD has been deducted. ";
+        }
+
+        cout << "Withdrawal successful. New balance: " << account.balance << endl;
+    } else if (amount <= 0) {
+        cout << "Invalid withdrawal amount. Please enter a positive value.\n";
+    } else if (static_cast<int>(amount) % 5 != 0) {
+        cout << "\a\aWithdrawal amount must be a multiple of 5 JD.\n";
+    } else {
+        cout << "\a\aInsufficient funds for withdrawal.\n";
+    }
+}
+
+// Function to display the account balance
+void displayBalance(const BankAccount& account) {
+    cout << "Account Holder: " << account.accountHolderName << endl;
+    cout << "Balance: " << account.balance << endl;
+
+    // Display transaction history
+    cout << "Transaction History:\n";
+    for (const Transaction& transaction : account.transactions) {
+        cout << "Type: " << transaction.type << ", Amount: " << transaction.amount << endl;
+    }
+}
+
+// Function to authenticate an account based on account holder name and PIN
+bool authenticateAccount(const BankAccount accounts[], const string& accountHolderName, int pin) {
+    for (int i = 0; i < MAX_ACCOUNTS; ++i) {
+        if (accounts[i].accountHolderName == accountHolderName && accounts[i].pin == pin && accounts[i].agreedToTerms) {
+            return true;
+        }
+    }
+    return false;
+}
