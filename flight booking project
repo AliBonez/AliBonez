@@ -1,0 +1,239 @@
+#include <iostream>
+#include <string>
+
+using namespace std;
+
+// Constant variable for the round trip price
+const double ROUND_TRIP_PRICE = 250.0;
+
+// Arrays to store country names, hotel names, and hotel prices
+string countries[] = {"|United Kingdom", "|United States", "|France", "|Germany", "|Japan", "|India", "|China", "|Brazil", "|Canada", "|Australia"};
+string hotels[] = {"Hotel A", "Hotel B", "Hotel C", "Hotel D", "Hotel E", "Hotel F", "Hotel G", "Hotel H", "Hotel I", "Hotel J"};
+double hotelPrices[] = {100.0, 120.0, 80.0, 150.0, 130.0, 90.0, 110.0, 140.0, 95.0, 120.0};
+
+// Function to display tourist attractions for a selected country
+void displayAttractions(int userChoice) {
+    string attractions[][5] = {
+        {"Buckingham Palace", "Tower of London", "British Museum", "Big Ben", "Hyde Park"},
+        {"Statue of Liberty", "Central Park", "Times Square", "Grand Canyon", "Yellowstone National Park"},
+        {"Eiffel Tower", "Louvre Museum", "Versailles Palace", "Mont Saint-Michel", "Champs-Élysées"},
+        {"Neuschwanstein Castle", "Brandenburg Gate", "Cologne Cathedral", "Black Forest", "Berlin Wall"},
+        {"Mount Fuji", "Tokyo Disneyland", "Kyoto Imperial Palace", "Osaka Castle", "Hiroshima Peace Memorial"},
+        {"Taj Mahal", "Jaipur City", "Varanasi Ghats", "Rishikesh", "Kerala Backwaters"},
+        {"Great Wall of China", "Forbidden City", "Terracotta Army", "Li River", "The Bund"},
+        {"Christ the Redeemer", "Iguazu Falls", "Copacabana Beach", "Amazon Rainforest", "Pantanal Wetlands"},
+        {"Niagara Falls", "Banff National Park", "CN Tower", "Vancouver Island", "Whistler"},
+        {"Sydney Opera House", "Great Barrier Reef", "Uluru-Kata Tjuta National Park", "Blue Mountains", "Bondi Beach"}
+    };
+
+    cout << "📌 Here are some top tourist attractions in " << countries[userChoice - 1] << ":" << endl;
+
+    // Display attractions for the selected country
+    for (int i = 0; i < 5; ++i) {
+        cout << i + 1 << ". " << attractions[userChoice - 1][i] << endl;
+    }
+}
+
+// Function to display hotel options
+void displayHotelOptions() {
+    cout << "🏨 Hotel Options:" << endl;
+    
+    // Display hotel options with features and prices
+    for (int i = 0; i < 10; ++i) {
+        cout << i + 1 << ". " << hotels[i] << " - Features: Some features here - Price per night: $" << hotelPrices[i] << endl;
+    }
+}
+
+// Function to calculate the total trip price
+double calculateTotalPrice(double basePrice, double hotelPrice, int numberOfNights, bool isRoundTrip) {
+    double total = basePrice + hotelPrice * numberOfNights;
+    
+    // If it's a round trip, add an additional $250 to the total price
+    if (isRoundTrip) {
+        total += ROUND_TRIP_PRICE;
+    }
+    
+    return total;
+}
+
+// Structure to store booking details
+struct Booking {
+    string name;
+    int age;
+    string gender;
+    string phone;
+    string country;
+    double totalPrice;
+};
+
+int main() {
+    const int MAX_BOOKINGS = 5;
+    Booking bookings[MAX_BOOKINGS];
+    int bookingCount = 0;
+
+    cout << "\a🌍 Welcome to Meu Embassy! 🌍" << endl;
+
+    cout << endl << endl;
+    cout << "       =  ===\\_____\\ " << endl;
+    cout << "              \\     \\" << endl;
+    cout << "         =  ===\\     \\" << endl;
+    cout << "                \\_____\\___________________,-~~~~~~~`-.._" << endl;
+    cout << "                /     o O o o o o O O o o o o o o O o  |\\_" << endl;
+    cout << "                `~-.__        ___..----..                  )" << endl;
+    cout << "                      `---~~\\___________/------------`````" << endl;
+    cout << "                      =  ===(_________D" << endl;
+    cout << endl;
+    cout << endl;
+
+    // User information
+    string name, gender, phone;
+    int age;
+
+    // Main loop for bookings
+    while (bookingCount < MAX_BOOKINGS) {
+        cout << "👤 Enter your name: \a";
+        cin >> name;
+
+        cout << "🎂 Enter your age: \a";
+        cin >> age;
+
+        cout << "⚥ Enter your gender (Male/Female): \a ";
+        cin >> gender;
+
+        cout << "📞 Enter your phone number: \a ";
+        cin >> phone;
+
+        // Array to store prices of one-way trips
+        double prices[] = {500.0, 800.0, 600.0, 700.0, 900.0, 400.0, 700.0, 1000.0, 550.0, 750.0};
+
+        // Display list of countries and their one-way trip prices
+        cout << "🗺️ List of countries and one-way trip prices 🛫:" << endl;
+        for (int i = 0; i < 10; ++i) {
+            cout << i + 1 << ". " << countries[i] << " - One-way trip price: $" << prices[i] << endl;
+        }
+
+        cout << "🤔 Enter a number to select a country (Enter '0' to exit): \a";
+        int userChoice;
+        cin >> userChoice;
+
+        if (userChoice == 0) {
+            // Exit the program
+            break;
+        }
+
+        if (userChoice >= 1 && userChoice <= 10) {
+            cout << "✈️ You selected: \a" << countries[userChoice - 1] << endl;
+
+            cout << "❓ Do you want to go without return (1) or round trip (2)? \a";
+            int travelType;
+            cin >> travelType;
+
+            // Check if the travel type is valid
+            if (travelType == 1 || travelType == 2) {
+                cout << "🌟 Have a trip to \a" << countries[userChoice - 1] << "!" << endl;
+
+                // Ask if the user wants to book a hotel
+                cout << "🏨 Do you want to book a hotel? Enter '1' for Yes or '2' for No: \a ";
+                int hotelChoice;
+                cin >> hotelChoice;
+
+                double totalPrice;
+                double basePrice = prices[userChoice - 1];
+
+                // Apply gender-based discount
+                if ((gender == "Male" || gender == "male") && age > 18) {
+                    totalPrice = basePrice;
+                    cout << "Welcome, Mr. " << name << "! ";
+                } else if ((gender == "Female" || gender == "female") && age > 18) {
+                    totalPrice = basePrice * 0.5;
+                    cout << "Welcome, Mrs. " << name << "! ";
+                } else {
+                    totalPrice = basePrice;
+                    cout << "Welcome, " << name << "! ";
+                }
+
+                // If the user wants to book a hotel, display hotel options
+                if (hotelChoice == 1) {
+                    displayHotelOptions();
+
+                    do {
+                        // Prompt the user to select a hotel
+                        cout << "Enter the number of the hotel you want to stay at: \a";
+                        int selectedHotel;
+                        cin >> selectedHotel;
+
+                        // Check if the selected hotel is valid
+                        if (selectedHotel >= 1 && selectedHotel <= 10) {
+                            double hotelPrice = hotelPrices[selectedHotel - 1];
+                            int numberOfNights;
+
+                            // Ask for the number of nights the user wants to stay
+                            cout << "Enter the number of nights you want to stay: \a ";
+                            cin >> numberOfNights;
+
+                            // Calculate the total price including hotel costs
+                            totalPrice = calculateTotalPrice(basePrice, hotelPrice, numberOfNights, travelType == 2);
+                            cout << "You chose to stay at \a " << hotels[selectedHotel - 1] << " for " << numberOfNights << " nights." << endl;
+                            break;
+                        } else {
+                            cout << "\a Invalid hotel selection. Please try again. \a " << endl;
+                        }
+                    } while (true);
+                }
+
+                // Display tourist attractions for the selected country
+                displayAttractions(userChoice);
+                cout << "\a************************\n************************\n************************\n";
+                // Display the total price for the trip
+                cout << "💲 The total price for the trip is: " << totalPrice << "💲" << endl;
+
+                // Display the trip summary
+                cout << "📝 Thank you for providing your information. Here is your trip summary:\a" << endl;
+                cout << "Name: " << name << endl;
+                cout << "Age: " << age << endl;
+                cout << "Gender: " << gender << endl;
+                cout << "Phone: " << phone << endl;
+                cout << "Country: " << countries[userChoice - 1] << endl;
+                cout << "Total Price: $" << totalPrice << endl;
+                cout << "************************\n************************\n************************\n";
+
+                // Store the booking details in the array
+                bookings[bookingCount] = {name, age, gender, phone, countries[userChoice - 1], totalPrice};
+                ++bookingCount;
+
+                // Ask if the user wants to make another booking
+                cout << "Do you want to make another booking? Enter '1' for Yes or '0' to exit: \a ";
+                int makeAnotherBooking;
+                cin >> makeAnotherBooking;
+
+                if (makeAnotherBooking == 0) {
+                    // Exit the program
+                    break;
+                }
+            } else {
+                cout << "❌  \aInvalid travel type selection." << endl;
+            }
+        } else {
+            cout << "❌ \a Invalid number. Please enter a number between 1 and 10." << endl;
+        }
+
+        cout << "🔄 Starting a new booking... \a " << endl;
+    }
+
+    // Display all bookings
+    cout << "📖 Booking Summary:" << endl;
+    for (int i = 0; i < bookingCount; ++i) {
+        cout << "Booking " << i + 1 << ":" << endl;
+        cout << "Name: " << bookings[i].name << endl;
+        cout << "Age: " << bookings[i].age << endl;
+        cout << "Gender: " << bookings[i].gender << endl;
+        cout << "Phone: " << bookings[i].phone << endl;
+        cout << "Country: " << bookings[i].country << endl;
+        cout << "Total Price: $" << bookings[i].totalPrice << endl;
+        cout << "----------------------" << endl;
+    }
+
+    cout << "\a 🙏 Thank you for using Meu Embassy! We hope you have a great trip. 🌟" << endl;
+
+    return 0;
+}
